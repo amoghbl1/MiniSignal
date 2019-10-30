@@ -1,0 +1,123 @@
+syntax = "proto2";
+
+message TLSSyn {
+    optional string clientDHHalf = 1;
+    optional bytes encryptedNonce = 2;
+    optional bytes oneDoesNotSimplyMAC = 3;
+}
+
+message TLSSynAck {
+    optional bytes encryptedNonces = 1;
+    optional bytes oneDoesNotSimplyMAC = 2;
+}
+
+message TLSAck {
+    optional bytes challengeNonce = 1;
+    optional bytes oneDoesNotSimplyMAC = 2;
+}
+
+message TLSPacket {
+    optional bytes payload = 1;
+    optional bytes oneDoesNotSimplyMAC = 2;
+}
+
+message ServerPacket {
+    optional ServerLoginRequest loginRequest = 1;
+    optional ServerListRequest listRequest = 2;
+    optional ServerSignupRequest signupRequest = 3;
+    optional ServerLogoutRequest logoutRequest = 4;
+    optional ServerPreKeyRequest prekeyRequest = 5;
+    optional ServerIdentityRequest identityRequest = 6;
+}
+
+message ClientPacket {
+    optional ServerLoginResponse loginResponse = 1;
+    optional ServerListResponse listResponse = 2;
+    optional P2PMessageRequest messageRequest = 3;
+    optional P2PMessageResponse messageResponse = 4;
+    optional ServerSignupResponse signupResponse = 5;
+    optional ServerLogoutResponse logoutResponse = 6;
+    optional ServerPreKeyResponse prekeyResponse = 7;
+    optional ServerIdentityResponse identityResponse = 8;
+}
+
+message ServerPreKeyRequest {
+    optional string username = 1;
+}
+
+message ServerPreKeyResponse {
+    optional bool success = 1;
+    optional string username = 2;
+    optional string identityKey = 3;
+    optional string preKey = 4;
+    optional string userIP = 5;
+    optional int64 port = 6;
+}
+
+message ServerIdentityRequest {
+    optional string identityKey = 1;
+}
+
+message ServerIdentityResponse {
+    optional bool success = 1;
+    optional string identityKey = 2;
+    optional string username = 3;
+    optional string userIP = 4;
+    optional int64 port = 5;
+}
+
+message ServerSignupRequest {
+    optional string username = 1;
+    optional string password = 2;
+}
+
+message ServerSignupResponse {
+    optional bool success = 1;
+}
+
+message ServerLoginRequest {
+    optional string username = 1;
+    optional string password = 2; 
+    optional int64 port = 3;
+    optional string identityKey = 4;
+    repeated string oneTimePreKeys = 5;
+}
+message ServerLoginResponse {
+    optional bool acknowledge = 1;
+}
+
+message ServerLogoutRequest {
+    optional string username = 1;
+    optional string password = 2;
+}
+
+message ServerLogoutResponse {
+    optional bool success = 1;
+}
+
+message ServerListRequest {
+    optional bool askForList = 1;
+}
+
+message ServerListResponse {
+    repeated ConnectedUser connectedUsers = 1;
+}
+
+message ConnectedUser {
+    optional string username = 1;
+    optional string userIP = 2;
+    optional int64 listenPort = 3;
+}
+
+message P2PMessageRequest {
+    optional string identityKey = 1;
+    optional string preKey = 2;
+    optional string senderEphemeral = 3;
+    optional int64 chainPosition = 4;
+    optional bytes payload = 5;
+    optional bytes oneDoesNotSimplyMAC = 6;
+}
+
+message P2PMessageResponse {
+    optional bool success = 1;
+}
